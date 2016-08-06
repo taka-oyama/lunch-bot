@@ -11,36 +11,23 @@
 
 Searcher = require('../scripts/searcher')
 
-urls = []
-
 module.exports = (robot) ->
 
   robot.hear /(https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+)/, (msg) ->
     url = msg.match[1]
-    if url in urls
-      return
     match = /r.gnavi.co.jp\/([a-zA-Z0-9]+)/.exec(url)
     if match == null 
       return
-    put_url url, match[1]
+    gid = match[1]
+    new Searcher().analyze(gid, (body) -> console.log(body) )
 
   robot.hear /([^\s]+?)が((食べ)|(たべ)|(飲み)|(のみ))たい/, (msg) ->
     keyword = msg.match[1]
-    candidate_urls = get_url(keyword)
-    return if candidate_urls.length == 0
     msg.send "#{keyword}ですね！こちらはいかがでしょう？"
-    for url in candidate_urls
-      msg.send url
+    new Searcher().search(keyword, on_search)
 
-  put_url = (url, gid) ->
-    console.log url 
-    console.log gid 
-    new Searcher().analyze(gid, (body) -> console.log(body) )
-    urls.push url
-
-  get_url = (keyword) ->
-    # search urls 
-    return urls
+  on_search = (json) ->
+    console.log(json)
 
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
