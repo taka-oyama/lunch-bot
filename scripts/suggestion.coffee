@@ -14,9 +14,16 @@ module.exports = (robot) ->
 
   robot.hear /(https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+)/, (msg) ->
     url = msg.match[1]
+
+    if url in urls
+      return
+
     match = /r.gnavi.co.jp\/([a-zA-Z0-9]+)/.exec(url)
-    if match != null 
-      put_url url, match[1]
+
+    if match == null 
+      return
+
+    put_url url, match[1]
 
   robot.hear /([^\s]+?)が((食べ)|(たべ)|(飲み)|(のみ))たい/, (msg) ->
     keyword = msg.match[1]
@@ -30,8 +37,8 @@ module.exports = (robot) ->
       msg.send url
 
   put_url = (url, gid) ->
-    console.log url 
-    console.log gid 
+#    console.log url 
+#    console.log gid 
     urls.push url
 
   get_url = (keyword) ->
