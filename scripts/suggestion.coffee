@@ -18,8 +18,7 @@ module.exports = (robot) ->
     if match != null 
       put_url url, match[1]
 
-  #robot.hear /(.+)[を|が]?[たべ|食べ|食い|くい|のみ|飲み]たい/, (msg) ->
-  robot.hear /(.+)が食べたい/, (msg) ->
+  robot.hear /([^\s]+?)が((食べ)|(たべ)|(飲み)|(のみ))たい/, (msg) ->
     for url in candidates(msg.match[1])
       msg.send url
 
