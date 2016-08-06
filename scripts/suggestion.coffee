@@ -8,10 +8,17 @@
 #
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
+urls = []
+
 module.exports = (robot) ->
 
-  robot.hear /(あらざし|アザラシ)/i, (msg) ->
-    msg.send "もふもふ"
+  robot.hear /(http:\/\/.+)/i, (msg) ->
+    urls.push "#{msg.match[1]}"
+    console.log "#{msg.match[1]}"
+
+  robot.hear /(.*)が[たべたい|食べたい]/, (msg) ->
+    for url in urls
+      msg.send url
 
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
