@@ -19,16 +19,23 @@ module.exports = (robot) ->
       put_url url, match[1]
 
   robot.hear /([^\s]+?)が((食べ)|(たべ)|(飲み)|(のみ))たい/, (msg) ->
-    for url in candidates(msg.match[1])
+    keyword = msg.match[1]
+
+    candidate_urls = get_url(keyword)
+    return if candidate_urls.length == 0
+
+    msg.send "#{keyword}ですね！こちらはいかがでしょう？"
+
+    for url in candidate_urls
       msg.send url
 
   put_url = (url, gid) ->
     console.log url 
     console.log gid 
+    urls.push url
 
-  candidates = (keyword) ->
+  get_url = (keyword) ->
     # search urls 
-    console.log(keyword)
     return urls
 
   # robot.hear /badger/i, (res) ->
