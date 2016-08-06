@@ -12,7 +12,7 @@ urls = []
 
 module.exports = (robot) ->
 
-  robot.hear /(https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+)/, (msg) ->
+  robot.hear /(https?:\/\/r.gnavi.co.jp\/[\w/:%#\$&\?\(\)~\.=\+\-]+)/, (msg) ->
     urls.push "#{msg.match[1]}"
     console.log "#{msg.match[1]}"
 
