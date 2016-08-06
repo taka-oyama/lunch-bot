@@ -12,11 +12,11 @@ urls = []
 
 module.exports = (robot) ->
 
-  robot.hear /(http:\/\/.+)/i, (msg) ->
+  robot.hear /(http:\/\/)/, (msg) ->
     urls.push "#{msg.match[1]}"
     console.log "#{msg.match[1]}"
 
-  robot.hear /(.*)が[たべたい|食べたい]/, (msg) ->
+  robot.hear /(.+)[を|が]?[たべ|食べ|食い|くい|のみ|飲み]たい/, (msg) ->
     for url in urls
       msg.send url
 
