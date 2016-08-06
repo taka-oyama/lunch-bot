@@ -4,25 +4,43 @@ elasticsearch = require('elasticsearch')
 client = new elasticsearch.Client(host: 'localhost:9200', log: 'trace')
 
 class Searcher
-  constructor: (@keyid) ->
+  search: (keyword, callback) ->
+    client.search({
+      index: 'lunchbot',
+      type: 'lunch',
+      body: {
+        query: {
+          match: {
+            text: keyword
+          }
+        }
+      }
+    }).then callback
 
-  analyze: (callback) ->
-    url = "http://r.gnavi.co.jp/" + @keyid + "/lunch/"
+  analyze: (keyid, callback) ->
+    url = "http://r.gnavi.co.jp/" + keyid + "/lunch/"
     request url, (err, res, body) =>
       throw err if err
       text = @analyzeWords(body)
-      @storeResults(url, text)
+      @storeResults(keyid, url, text)
       callback(text)
+
+  remove: (keyid, callback) ->
+    client.delete({
+      index: 'lunchbot',
+      type: 'lunch',
+      id: keyid
+    }).then (body) -> callback(body)
 
   analyzeWords: (html) ->
     $ = cheerio.load html, normalizeWhitespace: true
     $(".menu-term, .menu-desc").text().replace(/\s+/g, " ")
 
-  storeResults: (url, text) ->
+  storeResults: (keyid, url, text) ->
     client.update({
       index: 'lunchbot',
       type: 'lunch',
-      id: @keyid,
+      id: keyid,
       body: {
         doc: {
           url: url,
@@ -30,8 +48,7 @@ class Searcher
         },
         doc_as_upsert: true
       }
-    }, (err, response) ->
-        console.log response.body
-    )
+    }).then console.log
+
 
 module.exports = Searcher
