@@ -25,6 +25,7 @@ class Searcher
       id: @keyid,
       body: {
         doc: {
+          url: url,
           text: text
         },
         doc_as_upsert: true
