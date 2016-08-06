@@ -24,10 +24,10 @@ module.exports = (robot) ->
   robot.hear /([^\s]+?)が((食べ)|(たべ)|(飲み)|(のみ))たい/, (msg) ->
     keyword = msg.match[1]
     msg.send "#{keyword}ですね！こちらはいかがでしょう？"
-    new Searcher().search(keyword, on_search)
-
-  on_search = (json) ->
-    console.log(json)
+    new Searcher().search keyword, (urls) ->
+      console.log(urls)
+      urls.forEach (url) ->
+        msg.send url
 
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
