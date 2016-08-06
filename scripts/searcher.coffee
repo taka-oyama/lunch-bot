@@ -15,10 +15,10 @@ class Searcher
           }
         }
       }
-    }).then body ->
+    }).then (body) ->
       results = body.hits.hits
       urls = []
-      results.forEach(r) -> urls.push r._source.url
+      results.forEach (r) -> urls.push r._source.url
       callback(urls)
 
   analyze: (keyid, callback) ->
