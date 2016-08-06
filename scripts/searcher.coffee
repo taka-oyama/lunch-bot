@@ -11,14 +11,14 @@ class Searcher
     request url, (err, res, body) =>
       throw err if err
       text = @analyzeWords(body)
-      @storeResults(text)
+      @storeResults(url, text)
       callback(text)
 
   analyzeWords: (html) ->
     $ = cheerio.load html, normalizeWhitespace: true
     $(".menu-term, .menu-desc").text().replace(/\s+/g, " ")
 
-  storeResults: (text) ->
+  storeResults: (url, text) ->
     client.update({
       index: 'lunchbot',
       type: 'lunch',
