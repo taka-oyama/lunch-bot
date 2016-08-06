@@ -16,9 +16,15 @@ module.exports = (robot) ->
     urls.push "#{msg.match[1]}"
     console.log "#{msg.match[1]}"
 
-  robot.hear /(.+)[を|が]?[たべ|食べ|食い|くい|のみ|飲み]たい/, (msg) ->
-    for url in urls
+  #robot.hear /(.+)[を|が]?[たべ|食べ|食い|くい|のみ|飲み]たい/, (msg) ->
+  robot.hear /(.+)が食べたい/, (msg) ->
+    for url in candidates(msg.match[1])
       msg.send url
+
+  candidates = (keyword) ->
+    # search urls 
+    console.log(keyword)
+    return urls
 
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
