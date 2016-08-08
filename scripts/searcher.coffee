@@ -1,7 +1,8 @@
 request = require('request')
 cheerio = require('cheerio')
 elasticsearch = require('elasticsearch')
-client = new elasticsearch.Client(host: 'localhost:9200', log: 'trace')
+#client = new elasticsearch.Client(host: 'localhost:9200', log: 'trace')
+client = new elasticsearch.Client(host: process.env.SEARCHBOX_URL)
 
 class Searcher
   search: (keyword, callback) ->
